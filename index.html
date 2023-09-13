@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+
+  <title>SponTTS</title>
+  <meta name="generator" content="Jekyll v3.9.0">
+  <meta property="og:title" content="TODO: title">
+  <meta property="og:locale" content="en_US">
+
+  <meta name="twitter:card" content="summary">
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-new-gr-c-s-check-loaded="14.1001.0" data-gr-ext-installed="">
+  <section class="page-header">
+
+
+
+  </section>
+
+  <section class="main-content">
+    <h1 id="">
+      <center>SponTTS: Modeling and Transferring Spontaneous Style for TTS</center>
+    </h1>
+
+
+    <h2>0. Contents</h2>
+    <ol>
+      <li><a href="#abstract">Abstract</a></li>
+      <li><a href="#seen_mos">Audio Samples of seen speaker</a></li>
+      <li><a href="#zeroshot_mos">Audio Samples of zero-shot scenario</a></li>
+    </ol>
+
+    <br><br>
+    <h2 id="abstract">1. Abstract<a name="abstract"></a></h2>
+    <p> Spontaneous speech synthesis aims to produce natural spontaneous speech from text. It is a challenging task as
+      the spontaneous speaking style exhibits notable differences such as disfluency and substantial prosody variability
+      compared to other speaking styles. Moreover, building a spontaneous TTS system desires sizable high-quality
+      labeled data. To address these challenges, we propose <i>SponTTS</i>, a two-stage model with neural bottleneck
+      (BN) features as intermediate representations, transferring spontaneous style to any speaker without spontaneous
+      expression. In the first stage of Text-to-BN, to obtain rich and spontaneous style-related prosody, we employ a
+      VAE-based posterior encoder to acquire the audio posterior distribution of spontaneous style and a spontaneous
+      phenomenon predictor to predict diverse spontaneous phenomena, such as changes in speaking rate and stress as
+      constraints on the posterior distribution. Meanwhile, we introduce a flow-based prior predictor to enrich
+      predicted rhythms to address the difficulty of predicting spontaneous prosody from the text. The second stage of
+      BN-to-Wave synthesizes the target speaker’s spontaneous speech by combining the BN features and the corresponding
+      speaker embedding. Experimental results demonstrate the effectiveness of SponTTS in modeling and transferring
+      spontaneous style in few-shot and zero-shot scenarios, generating more natural speech with expressive spontaneous
+      style and high speaker similarity.
+    </p>
+
+    <center><img src='fig/拟人化迁移总体结构.png' style="width: auto;height: auto;max-width: 40%;"></center>
+    <div align="center"><b>Fig.1</b> The overview architecture of SponTTS.</div>
+
+    <br><br>
+
+    <table frame=void rules=none>
+      <tr>
+        <td>
+          <center><img src='fig/text2ppg.png' style="width: auto;height: auto;max-width: 50%;"></center>
+          <div align="center"><b>Fig.2</b> The structure of Text2BN.</div>
+        </td>
+        <td>
+          <center><img src='fig/ppg2wav.png' style="width: auto;height: auto;max-width: 65%;"></center>
+          <div align="center"><b>Fig.3</b> The structure of BN2Wave.</div>
+        </td>
+      </tr>
+    </table>
+
+    <br><br>
+
+    <h2>2. Audio Samples in seen speaker<a name="seen_mos"></a>
+    </h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align: center"><strong>Target speaker</strong></th>
+          <th style="text-align: center"><strong>Reading style</strong></th>
+          <th style="text-align: center"><strong>Baseline</strong></th>
+          <th style="text-align: center"><strong>TP</strong></th>
+          <th style="text-align: center"><strong>TPVAE</strong></th>
+          <th style="text-align: center"><strong>SponTTS (Proposed)</strong></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align: center; word-break: keep-all; white-space: nowrap;" rowspan=4><audio
+              src="subjective/seen_mos/ref1/modal01_5.wav" controls="" preload=""></audio></td>
+          <td style="text-align: left" colspan=6>Text: 哦那但是嗯，这礼拜明明天是多少钱了明天？。(.)</td>
+        </tr>
+        <tr>
+          <td style="text-align: left"><audio src="subjective/seen_mos/reading/modal01_5.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos/adavits_f03db6_id_fp/modal01_5.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos/event-v1_4/modal01_5.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos/event-v4_25/modal01_5.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos/event-v4_24/modal01_5.wav" controls=""
+              preload=""></audio></td>
+        </tr>
+        <tr>
+          <td style="text-align: left" colspan=6>Text: 后来回来的时候，我自己坐着飞机回来的。(.)</td>
+        </tr>
+        <tr>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/reading/F03-M83-0313044072.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/adavits_f03db6_id_fp/F03-M83-0313044072.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/event-v1_4/F03-M83-0313044072.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/event-v4_25/F03-M83-0313044072.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/event-v4_24/F03-M83-0313044072.wav" controls=""
+              preload=""></audio></td>
+        </tr>
+        <tr>
+          <td style="text-align: center; word-break: keep-all; white-space: nowrap;" rowspan=4><audio
+              src="subjective/seen_mos/ref1/F03-M83-0313052171.wav" controls="" preload=""></audio></td>
+          <td style="text-align: left" colspan=6>Text: 你告诉我我就知道了。(.)</td>
+        </tr>
+        <tr>
+          <td style="text-align: left"><audio src="subjective/seen_mos/reading/F03-M83-0313052171.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos/adavits_f03db6_id_fp/F03-M83-0313052171.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos/event-v1_4/F03-M83-0313052171.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos/event-v4_25/F03-M83-0313052171.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos/event-v4_24/F03-M83-0313052171.wav" controls=""
+              preload=""></audio></td>
+        </tr>
+        <tr>
+          <td style="text-align: left" colspan=6>Text: 唉好吧，那还好，其实我现在花钱就是也很多。(.)</td>
+        </tr>
+        <tr>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/reading/F03-M84-0313039038.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/adavits_f03db6_id_fp/F03-M84-0313039038.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/event-v1_4/F03-M84-0313039038.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/event-v4_25/F03-M84-0313039038.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/event-v4_24/F03-M84-0313039038.wav" controls=""
+              preload=""></audio></td>
+        </tr>
+        <tr>
+          <td style="text-align: center; word-break: keep-all; white-space: nowrap;" rowspan=4><audio
+              src="subjective/seen_mos/ref1/F03-M83-0313021279.wav" controls="" preload=""></audio></td>
+          <td style="text-align: left" colspan=6>Text: 呵呵嗯。(.)</td>
+        </tr>
+        <tr>
+          <td style="text-align: left"><audio src="subjective/seen_mos/reading/F03-M83-0313021279.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos/adavits_f03db6_id_fp/F03-M83-0313021279.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos/event-v1_4/F03-M83-0313021279.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos/event-v4_25/F03-M83-0313021279.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos/event-v4_24/F03-M83-0313021279.wav" controls=""
+              preload=""></audio></td>
+        </tr>
+        <tr>
+          <td style="text-align: left" colspan=6>Text: 当然需求的话肯定是有这一部分的。(.)</td>
+        </tr>
+        <tr>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/reading/M8312009370.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/adavits_f03db6_id_fp/M8312009370.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/event-v1_4/M8312009370.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/event-v4_25/M8312009370.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/event-v4_24/M8312009370.wav" controls=""
+              preload=""></audio></td>
+        </tr>
+        <tr>
+          <td style="text-align: center; word-break: keep-all; white-space: nowrap;" rowspan=4><audio
+              src="subjective/seen_mos/ref1/F03-M83-0313027099.wav" controls="" preload=""></audio></td>
+          <td style="text-align: left" colspan=6>Text: 嗯，然后它还拿出来讲，结果后来就被网友给人肉出来了。(.)</td>
+        </tr>
+        <tr>
+          <td style="text-align: left"><audio src="subjective/seen_mos/reading/F03-M83-0313027099.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos/adavits_f03db6_id_fp/F03-M83-0313027099.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos/event-v1_4/F03-M83-0313027099.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos/event-v4_25/F03-M83-0313027099.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos/event-v4_24/F03-M83-0313027099.wav" controls=""
+              preload=""></audio></td>
+        </tr>
+        <tr>
+          <td style="text-align: left" colspan=6>Text: 他们看到的永远都是别人想要他们看到的东西，他们就也会变得越来的越浮躁。(.)</td>
+        </tr>
+        <tr>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/reading/F0312006227.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/adavits_f03db6_id_fp/F0312006227.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/event-v1_4/F0312006227.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/event-v4_25/F0312006227.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/seen_mos_2/event-v4_24/F0312006227.wav" controls=""
+              preload=""></audio></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <br><br>
+
+    <h2>3. Audio Samples in zero-shot scenario<a name="zeroshot_mos"></a>
+    </h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align: center"><strong>Target speaker</strong></th>
+          <th style="text-align: center"><strong>Reading style</strong></th>
+          <th style="text-align: center"><strong>Baseline</strong></th>
+          <th style="text-align: center"><strong>TP</strong></th>
+          <th style="text-align: center"><strong>TPVAE</strong></th>
+          <th style="text-align: center"><strong>SponTTS (Proposed)</strong></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align: center; word-break: keep-all; white-space: nowrap;" rowspan=2><audio
+              src="subjective/zeroshot_mos_2/ref1/F03-M84-0313039038.wav" controls="" preload=""></audio></td>
+          <td style="text-align: left" colspan=6>Text: 唉好吧，那还好，其实我现在花钱就是也很多。(Oh well, that's okay, in fact, I spend a
+            lot of money now.)</td>
+        </tr>
+        <tr>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos_2/reading/F03-M84-0313039038.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio
+              src="subjective/zeroshot_mos_2/adavits_f03db6_id_fp/F03-M84-0313039038.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos_2/event-v1_4/F03-M84-0313039038.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos_2/event-v4_25/F03-M84-0313039038.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos_2/event-v4_24/F03-M84-0313039038.wav"
+              controls="" preload=""></audio></td>
+        </tr>
+        <tr>
+          <td style="text-align: center; word-break: keep-all; white-space: nowrap;" rowspan=2><audio
+              src="subjective/zeroshot_mos_2/ref1/F0312002117.wav" controls="" preload=""></audio></td>
+          <td style="text-align: left" colspan=6>Text: 就我不是很喜欢就是。(.)</td>
+        </tr>
+        <tr>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos_2/reading/F0312002117.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos_2/adavits_f03db6_id_fp/F0312002117.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos_2/event-v1_4/F0312002117.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos_2/event-v4_25/F0312002117.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos_2/event-v4_24/F0312002117.wav" controls=""
+              preload=""></audio></td>
+        </tr>
+        <tr>
+          <td style="text-align: center; word-break: keep-all; white-space: nowrap;" rowspan=2><audio
+              src="subjective/zeroshot_mos/ref1/F03-M83-0313066040.wav" controls="" preload=""></audio></td>
+          <td style="text-align: left" colspan=6>Text: 因为他们都是吃草长大的。(.)</td>
+        </tr>
+        <tr>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos/reading/F03-M83-0313066040.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos/adavits_f03db6_id_fp/F03-M83-0313066040.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos/event-v1_4/F03-M83-0313066040.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos/event-v4_25/F03-M83-0313066040.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos/event-v4_24/F03-M83-0313066040.wav"
+              controls="" preload=""></audio></td>
+        </tr>
+        <tr>
+          <td style="text-align: center; word-break: keep-all; white-space: nowrap;" rowspan=2><audio
+              src="subjective/zeroshot_mos/ref1/F03-M83-0313007007.wav" controls="" preload=""></audio></td>
+          <td style="text-align: left" colspan=6>Text: 哎，走不了啦然后那个饭堂的那个玻璃门被撞的声儿。(.)</td>
+        </tr>
+        <tr>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos/reading/F03-M83-0313007007.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos/adavits_f03db6_id_fp/F03-M83-0313007007.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos/event-v1_4/F03-M83-0313007007.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos/event-v4_25/F03-M83-0313007007.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/zeroshot_mos/event-v4_24/F03-M83-0313007007.wav"
+              controls="" preload=""></audio></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <footer class="site-footer">
+
+      <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com/">GitHub
+          Pages</a>.</span>
+    </footer>
+  </section>
+</body>
+
+</html>
