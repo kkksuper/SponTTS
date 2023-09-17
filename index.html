@@ -35,26 +35,13 @@
     <h2>0. Contents</h2>
     <ol>
       <li><a href="#abstract">Abstract</a></li>
-      <li><a href="#seen_mos">Audio Samples of seen speaker</a></li>
-      <li><a href="#zeroshot_mos">Audio Samples of zero-shot scenario</a></li>
+      <li><a href="#seen_mos">Audio Samples of seen speakers</a></li>
+      <li><a href="#zeroshot_mos">Audio Samples of unseen speakers</a></li>
     </ol>
 
     <br><br>
     <h2 id="abstract">1. Abstract<a name="abstract"></a></h2>
-    <p> Spontaneous speech synthesis aims to produce natural spontaneous speech from text. It is a challenging task as
-      the spontaneous speaking style exhibits notable differences such as disfluency and substantial prosody variability
-      compared to other speaking styles. Moreover, building a spontaneous TTS system desires sizable high-quality
-      labeled data. To address these challenges, we propose <i>SponTTS</i>, a two-stage model with neural bottleneck
-      (BN) features as intermediate representations, transferring spontaneous style to any speaker without spontaneous
-      expression. In the first stage of Text-to-BN, to obtain rich and spontaneous style-related prosody, we employ a
-      VAE-based posterior encoder to acquire the audio posterior distribution of spontaneous style and a spontaneous
-      phenomenon predictor to predict diverse spontaneous phenomena, such as changes in speaking rate and stress as
-      constraints on the posterior distribution. Meanwhile, we introduce a flow-based prior predictor to enrich
-      predicted rhythms to address the difficulty of predicting spontaneous prosody from the text. The second stage of
-      BN-to-Wave synthesizes the target speaker’s spontaneous speech by combining the BN features and the corresponding
-      speaker embedding. Experimental results demonstrate the effectiveness of SponTTS in modeling and transferring
-      spontaneous style in few-shot and zero-shot scenarios, generating more natural speech with expressive spontaneous
-      style and high speaker similarity.
+    <p> Spontaneous speaking style exhibits notable differences from other speaking styles due to various spontaneous phenomena (e.g., filled pauses, prolongation) and substantial prosody variation (e.g., diverse pitch and duration variation, occasional non-verbal speech like smile), posing challenges to modeling and prediction of spontaneous style. Moreover, the limitation of high-quality spontaneous data constrains spontaneous speech generation for speakers without spontaneous data. To address these problems, we propose \textit{SponTTS}, a two-stage approach based on bottleneck (BN) features to model and transfer spontaneous style for TTS. In the first stage, we adopt a Conditional Variational Autoencoder (CVAE) to capture spontaneous prosody from a BN feature and involve the spontaneous phenomena by the constraint of spontaneous phenomena embedding prediction loss. Besides, we introduce a flow-based predictor to predict a latent spontaneous style representation from the text, which enriches the prosody and context-specific spontaneous phenomena during inference. In the second stage, we adopt a VITS-like module to transfer the spontaneous style learned in the first stage to target speakers. Experiments demonstrate that SponTTS is effective in modeling spontaneous style and transferring the style to the target speakers, generating spontaneous speech with high naturalness, expressiveness, and speaker similarity. The zero-shot spontaneous style TTS test further verifies the generalization and robustness of SponTTS in generating spontaneous speech for unseen speakers.
     </p>
 
     <center><img src='fig/拟人化迁移总体结构.png' style="width: auto;height: auto;max-width: 40%;"></center>
@@ -62,14 +49,14 @@
 
     <br><br>
 
-    <table frame=void rules=none>
+    <table frame=void rules=none align="center">
       <tr>
         <td>
-          <center><img src='fig/text2ppg.png' style="width: auto;height: auto;max-width: 50%;"></center>
+          <center><img src='fig/text2ppg.png' style="width: auto;height: auto;max-width: 80%;"></center>
           <div align="center"><b>Fig.2</b> The structure of Text2BN.</div>
         </td>
         <td>
-          <center><img src='fig/ppg2wav.png' style="width: auto;height: auto;max-width: 65%;"></center>
+          <center><img src='fig/ppg2wav.png' style="width: auto;height: auto;max-width: 100%;"></center>
           <div align="center"><b>Fig.3</b> The structure of BN2Wave.</div>
         </td>
       </tr>
@@ -77,7 +64,7 @@
 
     <br><br>
 
-    <h2>2. Audio Samples in seen speaker<a name="seen_mos"></a>
+    <h2>2. Audio Samples in seen speakers<a name="seen_mos"></a>
     </h2>
 
     <table>
@@ -225,7 +212,7 @@
 
     <br><br>
 
-    <h2>3. Audio Samples in zero-shot scenario<a name="zeroshot_mos"></a>
+    <h2>3. Audio Samples in unseen speakers<a name="zeroshot_mos"></a>
     </h2>
 
     <table>
