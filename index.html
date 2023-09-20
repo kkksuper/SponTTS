@@ -19,24 +19,31 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body data-new-gr-c-s-check-loaded="14.1001.0" data-gr-ext-installed="">
+<body data-new-gr-c-s-check-loaded="14.1001.0" data-gr-ext-installed="" >
   <section class="page-header">
 
 
 
   </section>
 
-  <section class="main-content">
+  <section class="main-content" style="padding: 50px 150px;">
     <h1 id="">
       <center>SponTTS: Modeling and Transferring Spontaneous Style for TTS</center>
     </h1>
 
+    <center> Hanzhao Li<sup>1</sup>, Xinfa Zhu<sup>1</sup>, Liumeng Xue<sup>2</sup>, Yang Song, Yunlin Chen<sup>3</sup>,  Xie Lei<sup>1</sup> </center>
+      
+    <center> <sup>1</sup>Audio, Speech and Language Processing Group (ASLP@NPU), School of Computer Science, Northwestern Polytechnical University, Xi'an, China<br /></center>
+    <center> <sup>2</sup>School of Data Science, The Chinese University of Hong Kong, Shenzhen (CUHK-Shenzhen), China</center>
+    <center> <sup>3</sup>Shanghai Mobvoi Information Technology Co., Ltd</center>
 
     <h2>0. Contents</h2>
     <ol>
       <li><a href="#abstract">Abstract</a></li>
-      <li><a href="#seen_mos">Audio Samples of seen speakers</a></li>
-      <li><a href="#zeroshot_mos">Audio Samples of unseen speakers</a></li>
+      <li><a href="#method">Compared method for audio samples</a>
+      <li><a href="#model">Audio Samples of spontaneous modeling</a>
+      <li><a href="#seen_mos">Audio Samples of spontaneous transfering for seen speakers</a></li>
+      <li><a href="#zeroshot_mos">Audio Samples of spontaneous transfering for unseen speakers</a></li>
     </ol>
 
     <br><br>
@@ -44,27 +51,118 @@
     <p> Spontaneous speaking style exhibits notable differences from other speaking styles due to various spontaneous phenomena (e.g., filled pauses, prolongation) and substantial prosody variation (e.g., diverse pitch and duration variation, occasional non-verbal speech like smile), posing challenges to modeling and prediction of spontaneous style. Moreover, the limitation of high-quality spontaneous data constrains spontaneous speech generation for speakers without spontaneous data. To address these problems, we propose \textit{SponTTS}, a two-stage approach based on bottleneck (BN) features to model and transfer spontaneous style for TTS. In the first stage, we adopt a Conditional Variational Autoencoder (CVAE) to capture spontaneous prosody from a BN feature and involve the spontaneous phenomena by the constraint of spontaneous phenomena embedding prediction loss. Besides, we introduce a flow-based predictor to predict a latent spontaneous style representation from the text, which enriches the prosody and context-specific spontaneous phenomena during inference. In the second stage, we adopt a VITS-like module to transfer the spontaneous style learned in the first stage to target speakers. Experiments demonstrate that SponTTS is effective in modeling spontaneous style and transferring the style to the target speakers, generating spontaneous speech with high naturalness, expressiveness, and speaker similarity. The zero-shot spontaneous style TTS test further verifies the generalization and robustness of SponTTS in generating spontaneous speech for unseen speakers.
     </p>
 
-    <center><img src='fig/拟人化迁移总体结构.png' style="width: auto;height: auto;max-width: 40%;"></center>
+    
+    <center><img src='fig/拟人化迁移总体结构.png' style="width: auto;height: auto;max-width: 60%;"></center>
     <div align="center"><b>Fig.1</b> The overview architecture of SponTTS.</div>
 
     <br><br>
 
-    <table frame=void rules=none align="center">
-      <tr>
-        <td>
-          <center><img src='fig/text2ppg.png' style="width: auto;height: auto;max-width: 80%;"></center>
+    <div class="container" style="padding: 0px 80px;">
+      <div class="image-wrapper">
+        <center><img src='fig/text2ppg.png' style="width: auto;height: 400px"></center>
           <div align="center"><b>Fig.2</b> The structure of Text2BN.</div>
-        </td>
-        <td>
-          <center><img src='fig/ppg2wav.png' style="width: auto;height: auto;max-width: 100%;"></center>
+      </div>
+      <div class="image-wrapper">
+        <center><img src='fig/ppg2wav.png' style="width: auto;height: 400px"></center>
           <div align="center"><b>Fig.3</b> The structure of BN2Wave.</div>
-        </td>
-      </tr>
+      </div>
+    </div>
+
+    <br><br>
+
+    <h2>2. Compared method for audio samples<a name="model"></a>
+    </h2>
+
+    <ul>
+      <li><b>Reading style:</b>We remove the spontaneous posterior encoder and prior encoder from SponTTS, a vanilla two-stage TTS framework without spontaneous style modeling, which use a reading-style corpus for training.</li>
+      <li><b>Baseline: </b>We remove the spontaneous posterior encoder and prior encoder from SponTTS, a vanilla two-stage TTS framework without spontaneous style modeling, which use a spontaneous corpus for training.</li>
+      <li><b>TP: </b>We remove the reference encoder and variational processes, and the style predictor directly predicts phenomena embedding corresponding to the output of the phenomena encoder, which means only spontaneous phenomena modeling is considered.</li>
+      <li><b>TPVAE: </b>We remove the phenomena predictor and phenomena encoder from SponTTS, which means we only model spontaneous prosody. </li>
+      <li><b>SponTTS: </b>Proposed method.</li> 
+    </ul>
+
+
+    <h2>3. Audio Samples of spontaneous modeling<a name="model"></a>
+    </h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align: center"><strong>Reading style</strong></th>
+          <th style="text-align: center"><strong>Baseline</strong></th>
+          <th style="text-align: center"><strong>TP</strong></th>
+          <th style="text-align: center"><strong>TPVAE</strong></th>
+          <th style="text-align: center"><strong>SponTTS</strong></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align: left" colspan=6><b>[rythm]</b>&emsp;Text: 然后就是你自己想买点东西啊，然后妈妈给的有时候想存一点就是一点吧。(Then you want to buy something yourself, and sometimes you want to save a little bit from what your mother gives you.)</td>
+        </tr>
+        <tr>
+          <td style="text-align: left"><audio src="subjective/modeling/reading/common_07.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio
+              src="subjective/modeling/adavits_f03db6_id_fp/common_07.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/modeling/event-v1_4/common_07.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/modeling/event-v4_25/common_07.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/modeling/event-v4_24/common_07.wav"
+              controls="" preload=""></audio></td>
+        </tr>
+        <tr>
+          <td style="text-align: left" colspan=6><b>[prolongation]</b>&emsp;Text: 我在翻面，然后煎一个差不多七分熟左右吧。(I'm flipping it over and frying it until it's almost medium-rare.)</td>
+        </tr>
+        <tr>
+          <td style="text-align: left"><audio src="subjective/modeling/reading/F0312003121.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/modeling/adavits_f03db6_id_fp/F0312003121.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/modeling/event-v1_4/F0312003121.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/modeling/event-v4_25/F0312003121.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/modeling/event-v4_24/F0312003121.wav" controls=""
+              preload=""></audio></td>
+        </tr>
+        <tr>
+          <td style="text-align: left" colspan=6><b>[injection]</b>&emsp;Text: 哇塞，你好厉害啊，可以给我签个名吗？(Wow, you are so awesome. Can you sign your name for me?)</td>
+        </tr>
+        <tr>
+          <td style="text-align: left"><audio src="subjective/modeling/reading/modal25表现力强_0_emo惊_3.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/modeling/adavits_f03db6_id_fp/modal25表现力强_0_emo惊_3.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/modeling/event-v1_4/modal25表现力强_0_emo惊_3.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/modeling/event-v4_25/modal25表现力强_0_emo惊_3.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/modeling/event-v4_24/modal25表现力强_0_emo惊_3.wav"
+              controls="" preload=""></audio></td>
+        </tr>
+        <tr>
+          <td style="text-align: left" colspan=6><b>[stress]</b>&emsp;Text: 哎，不是有一句话这样说嘛，你永远不知道明天和意外哪个先来。(Hey, isn't there a saying that says, you never know which will come first, tomorrow or the accident.)</td>
+        </tr>
+        <tr>
+          <td style="text-align: left"><audio src="subjective/modeling/reading/modal07醒悟_2.wav" controls=""
+              preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/modeling/adavits_f03db6_id_fp/modal07醒悟_2.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/modeling/event-v1_4/modal07醒悟_2.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/modeling/event-v4_25/modal07醒悟_2.wav"
+              controls="" preload=""></audio></td>
+          <td style="text-align: left"><audio src="subjective/modeling/event-v4_24/modal07醒悟_2.wav"
+              controls="" preload=""></audio></td>
+        </tr>
+      </tbody>
     </table>
 
     <br><br>
 
-    <h2>2. Audio Samples in seen speakers<a name="seen_mos"></a>
+    <h2>4. Audio Samples of spontaneous transfering for seen speakers<a name="seen_mos"></a>
     </h2>
 
     <table>
@@ -75,14 +173,14 @@
           <th style="text-align: center"><strong>Baseline</strong></th>
           <th style="text-align: center"><strong>TP</strong></th>
           <th style="text-align: center"><strong>TPVAE</strong></th>
-          <th style="text-align: center"><strong>SponTTS (Proposed)</strong></th>
+          <th style="text-align: center"><strong>SponTTS</strong></th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td style="text-align: center; word-break: keep-all; white-space: nowrap;" rowspan=4><audio
               src="subjective/seen_mos/ref1/modal01_5.wav" controls="" preload=""></audio></td>
-          <td style="text-align: left" colspan=6>Text: 哦那但是嗯，这礼拜明明天是多少钱了明天？。(.)</td>
+          <td style="text-align: left" colspan=6><b>[silent pause]</b>&emsp;Text: 哦那但是嗯，这礼拜明明天是多少钱了明天？(Oh, but um, how much will it cost to- tomorrow this week?)</td>
         </tr>
         <tr>
           <td style="text-align: left"><audio src="subjective/seen_mos/reading/modal01_5.wav" controls=""
@@ -97,7 +195,7 @@
               preload=""></audio></td>
         </tr>
         <tr>
-          <td style="text-align: left" colspan=6>Text: 后来回来的时候，我自己坐着飞机回来的。(.)</td>
+          <td style="text-align: left" colspan=6><b>[stress]</b>&emsp;Text: 后来回来的时候，我自己坐着飞机回来的。(When I came back later, I took a plane back by myself.)</td>
         </tr>
         <tr>
           <td style="text-align: left"><audio src="subjective/seen_mos_2/reading/F03-M83-0313044072.wav" controls=""
@@ -114,7 +212,7 @@
         <tr>
           <td style="text-align: center; word-break: keep-all; white-space: nowrap;" rowspan=4><audio
               src="subjective/seen_mos/ref1/F03-M83-0313052171.wav" controls="" preload=""></audio></td>
-          <td style="text-align: left" colspan=6>Text: 你告诉我我就知道了。(.)</td>
+          <td style="text-align: left" colspan=6><b>[stress]</b>&emsp;Text: 你告诉我我就知道了。(Just tell me and I'll know.)</td>
         </tr>
         <tr>
           <td style="text-align: left"><audio src="subjective/seen_mos/reading/F03-M83-0313052171.wav" controls=""
@@ -129,7 +227,7 @@
               preload=""></audio></td>
         </tr>
         <tr>
-          <td style="text-align: left" colspan=6>Text: 唉好吧，那还好，其实我现在花钱就是也很多。(.)</td>
+          <td style="text-align: left" colspan=6><b>[injection]</b>&emsp;Text: 唉好吧，那还好，其实我现在花钱就是也很多。(Oh well, that’s okay. In fact, I spend a lot of money now.)</td>
         </tr>
         <tr>
           <td style="text-align: left"><audio src="subjective/seen_mos_2/reading/F03-M84-0313039038.wav" controls=""
@@ -146,7 +244,7 @@
         <tr>
           <td style="text-align: center; word-break: keep-all; white-space: nowrap;" rowspan=4><audio
               src="subjective/seen_mos/ref1/F03-M83-0313021279.wav" controls="" preload=""></audio></td>
-          <td style="text-align: left" colspan=6>Text: 呵呵嗯。(.)</td>
+          <td style="text-align: left" colspan=6><b>[smile]</b>&emsp;Text: 呵呵嗯。(Haha um.)</td>
         </tr>
         <tr>
           <td style="text-align: left"><audio src="subjective/seen_mos/reading/F03-M83-0313021279.wav" controls=""
@@ -161,7 +259,7 @@
               preload=""></audio></td>
         </tr>
         <tr>
-          <td style="text-align: left" colspan=6>Text: 当然需求的话肯定是有这一部分的。(.)</td>
+          <td style="text-align: left" colspan=6><b>[stress]</b>&emsp;Text: 当然需求的话肯定是有这一部分的。(Of course, if there is a demand, there will definitely be this part.)</td>
         </tr>
         <tr>
           <td style="text-align: left"><audio src="subjective/seen_mos_2/reading/M8312009370.wav" controls=""
@@ -178,7 +276,7 @@
         <tr>
           <td style="text-align: center; word-break: keep-all; white-space: nowrap;" rowspan=4><audio
               src="subjective/seen_mos/ref1/F03-M83-0313027099.wav" controls="" preload=""></audio></td>
-          <td style="text-align: left" colspan=6>Text: 嗯，然后它还拿出来讲，结果后来就被网友给人肉出来了。(.)</td>
+          <td style="text-align: left" colspan=6><b>[rythm]</b>&emsp;Text: 嗯，然后它还拿出来讲，结果后来就被网友给人肉出来了。(Well, then it was talked about, but later it was exposed by netizens.)</td>
         </tr>
         <tr>
           <td style="text-align: left"><audio src="subjective/seen_mos/reading/F03-M83-0313027099.wav" controls=""
@@ -193,7 +291,7 @@
               preload=""></audio></td>
         </tr>
         <tr>
-          <td style="text-align: left" colspan=6>Text: 他们看到的永远都是别人想要他们看到的东西，他们就也会变得越来的越浮躁。(.)</td>
+          <td style="text-align: left" colspan=6><b>[silent pause]</b>&emsp;Text: 他们看到的永远都是别人想要他们看到的东西，他们就也会变得越来的越浮躁。(What they see is always what others want them to see, and they become more and more impetuous.)</td>
         </tr>
         <tr>
           <td style="text-align: left"><audio src="subjective/seen_mos_2/reading/F0312006227.wav" controls=""
@@ -212,7 +310,7 @@
 
     <br><br>
 
-    <h2>3. Audio Samples in unseen speakers<a name="zeroshot_mos"></a>
+    <h2>5. Audio Samples of spontaneous transfering for unseen speakers<a name="zeroshot_mos"></a>
     </h2>
 
     <table>
@@ -223,14 +321,14 @@
           <th style="text-align: center"><strong>Baseline</strong></th>
           <th style="text-align: center"><strong>TP</strong></th>
           <th style="text-align: center"><strong>TPVAE</strong></th>
-          <th style="text-align: center"><strong>SponTTS (Proposed)</strong></th>
+          <th style="text-align: center"><strong>SponTTS</strong></th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td style="text-align: center; word-break: keep-all; white-space: nowrap;" rowspan=2><audio
               src="subjective/zeroshot_mos_2/ref1/F03-M84-0313039038.wav" controls="" preload=""></audio></td>
-          <td style="text-align: left" colspan=6>Text: 唉好吧，那还好，其实我现在花钱就是也很多。(Oh well, that's okay, in fact, I spend a
+          <td style="text-align: left" colspan=6><b>[injection]</b>&emsp;Text: 唉好吧，那还好，其实我现在花钱就是也很多。(Oh well, that's okay, in fact, I spend a
             lot of money now.)</td>
         </tr>
         <tr>
@@ -249,7 +347,7 @@
         <tr>
           <td style="text-align: center; word-break: keep-all; white-space: nowrap;" rowspan=2><audio
               src="subjective/zeroshot_mos_2/ref1/F0312002117.wav" controls="" preload=""></audio></td>
-          <td style="text-align: left" colspan=6>Text: 就我不是很喜欢就是。(.)</td>
+          <td style="text-align: left" colspan=6><b>[silent pause]</b>&emsp;Text: 就我不是很喜欢就是。(It's just that I don't like it very much.)</td>
         </tr>
         <tr>
           <td style="text-align: left"><audio src="subjective/zeroshot_mos_2/reading/F0312002117.wav" controls=""
@@ -266,7 +364,7 @@
         <tr>
           <td style="text-align: center; word-break: keep-all; white-space: nowrap;" rowspan=2><audio
               src="subjective/zeroshot_mos/ref1/F03-M83-0313066040.wav" controls="" preload=""></audio></td>
-          <td style="text-align: left" colspan=6>Text: 因为他们都是吃草长大的。(.)</td>
+          <td style="text-align: left" colspan=6><b>[silent pause]</b>&emsp;Text: 因为他们都是吃草长大的。(Because they all grew up eating grass.)</td>
         </tr>
         <tr>
           <td style="text-align: left"><audio src="subjective/zeroshot_mos/reading/F03-M83-0313066040.wav" controls=""
@@ -283,7 +381,7 @@
         <tr>
           <td style="text-align: center; word-break: keep-all; white-space: nowrap;" rowspan=2><audio
               src="subjective/zeroshot_mos/ref1/F03-M83-0313007007.wav" controls="" preload=""></audio></td>
-          <td style="text-align: left" colspan=6>Text: 哎，走不了啦然后那个饭堂的那个玻璃门被撞的声儿。(.)</td>
+          <td style="text-align: left" colspan=6><b>[stress]</b>&emsp;Text: 哎，走不了啦然后那个饭堂的那个玻璃门被撞的声儿。(Hey, I couldn't leave, and then there was a sound of the glass door of the canteen being hit.)</td>
         </tr>
         <tr>
           <td style="text-align: left"><audio src="subjective/zeroshot_mos/reading/F03-M83-0313007007.wav" controls=""
